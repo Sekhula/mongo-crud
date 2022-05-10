@@ -1,10 +1,14 @@
-const db = require("../models");
-const Tutorial = db.tutorials;
+const db = require("../model");
+const User = db.users;
 
 // Create and Save a new user
 exports.create = (req, res) => {
-   // Validate request
-  if (!req.body.title) 
+
+  //Check if we recieve the object 
+  console.log(req.body);
+
+  // Validate request
+  if (!req.body.full_name) 
   {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
@@ -13,6 +17,9 @@ exports.create = (req, res) => {
   const user = new User({
     full_name: req.body.full_name,
     age: req.body.age,
+    email: req.body.email,
+    cell: req.body.cell,
+    password: req.body.password,
     status: req.body.status ? req.body.status : false
   });
   // Save user in the database
@@ -24,7 +31,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the user."
       });
     });
 };
@@ -105,6 +112,7 @@ exports.delete = (req, res) => {
       });
     });
 };
+
 // Delete all users from the database.
 exports.deleteAll = (req, res) => {
     User.deleteMany({})
@@ -122,7 +130,7 @@ exports.deleteAll = (req, res) => {
 };
 
 // Find all published users
-exports.findAllActive = (req, res) => {
+exports.findActiveUsers = (req, res) => {
     User.find({ status: true })
     .then(data => {
       res.send(data);

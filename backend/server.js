@@ -3,6 +3,8 @@ const cors = require("cors");
 const app = express();
 const db = require("./app/model/index");
 
+// require("./app/routes/userRoutes")(app);
+
 db.mongoose.connect(db.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -15,7 +17,7 @@ db.mongoose.connect(db.url, {
   });
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://localhost:*"
 };
 
 app.use(cors(corsOptions));
@@ -27,6 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to react backend application." });
 });
+
+require("./app/routes/userRoutes")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 
