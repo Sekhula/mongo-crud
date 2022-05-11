@@ -1,5 +1,6 @@
 const db = require("../model");
 const User = db.users;
+const class_validor = require('class-validators')
 
 // Create and Save a new user
 exports.create = (req, res) => {
@@ -7,33 +8,28 @@ exports.create = (req, res) => {
   //Check if we recieve the object 
   console.log(req.body);
 
-  // Validate request
-  if (!req.body.full_name) 
-  {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
   // Create a user
   const user = new User({
-    full_name: req.body.full_name,
-    age: req.body.age,
+    full_name:req.body.full_name,
+    school: req.body.school,
     email: req.body.email,
     cell: req.body.cell,
     password: req.body.password,
     status: req.body.status ? req.body.status : false
   });
+  
   // Save user in the database
-  user
-    .save(user)
+  user.save(user)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the user."
+        message:err.message || "Some error occurred while creating the user.",
+        stack: err.stack
       });
     });
+    //user.save();
 };
 
 // Retrieve all users from the database.
@@ -55,7 +51,7 @@ exports.findAllUsers = (req, res) => {
 // Find a single user with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
-    Tutorial.findById(id)
+    User.findById(id)
       .then(data => {
         if (!data)
           res.status(404).send({ message: "Not found user with id " + id });

@@ -1,0 +1,8 @@
+mongosh
+
+use <dbName>
+
+----------------------Users Model---------------------
+    db.users.createIndex({"email":1},{unique: true})
+    db.users.createIndex({"cell":1},{unique: true})
+------------------------------------------------------
